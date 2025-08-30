@@ -13,3 +13,5 @@ elif operacao == "/":
     print(num1 / num2)
 else:
     print("Operação inválida")
+
+print("Obrigado(a) por utilizar nosso programa!")
