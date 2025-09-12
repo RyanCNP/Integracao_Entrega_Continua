@@ -1,0 +1,29 @@
+name: Controle de Versionamento
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  versionamento:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checar código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Validar código com flake8
+        run: |
+          pip install flake8
+          flake8 Codigo/*.py
+
+      - name: Gerar versão e release
+        uses: python-semantic-release/python-semantic-release@v9
+        with:
+          github_token: ${{secrets.PAO_DE_MEL}}
