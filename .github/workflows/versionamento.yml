@@ -6,24 +6,32 @@ on:
       - main
 
 jobs:
-  versionamento:
+  release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checar código
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Validar código com flake8
+      - name: Instalar dependências
         run: |
+          python -m pip install --upgrade pip
           pip install flake8
-          flake8 Codigo/*.py
 
-      - name: Gerar versão e release
-        uses: python-semantic-release/python-semantic-release@v9
-        with:
-          github_token: ${{secrets.PAO_DE_MEL}}
+      - name: Validar código com flake8
+        run: flake8 Codigo/*.py
+
+      - name: Instalar python-semantic-release
+        run: pip install python-semantic-release
+
+      - name: Executar semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.PAO_DE_MEL }}
+        run: semantic-release publish
